@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Регистрация</h1>
+    </header>
+
+    <main>
+        <form id="registrationForm">
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="email">Электронная почта:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+        <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
+    </main>
+
+    <footer>
+        <p align="center">&copy; 2025 Продажа Билетов. Все права защищены.</p>
+    </footer>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Сохранение данных в локальное хранилище (для простоты)
+            localStorage.setItem('user', JSON.stringify({ username, email, password }));
+            alert('Регистрация успешна! Теперь вы можете войти.');
+            window.location.href = 'login.html'; // Перенаправление на страницу входа
+        });
+    </script>
+</body>
+</html>

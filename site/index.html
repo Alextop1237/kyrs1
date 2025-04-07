@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Продажа Билетов на Мероприятия</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Продажа Билетов на Мероприятия</h1>
+        <nav>
+            <ul>
+                <li><a href="#movies">Кино</a></li>
+                <li><a href="#theaters">Театры</a></li>
+                <li><a href="#concerts">Концерты</a></li>
+            </ul>
+        </nav>
+        <div id="userGreeting"></div>
+        <div id="authLinks">
+            <a href="login.html" id="loginLink">Вход</a>
+            <a href="register.html" id="registerLink">Регистрация</a>
+            <a href="#" id="logoutLink" style="display: none;">Выйти</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="userSetup" style="display: none;">
+            <h2>Введите ваше имя</h2>
+            <input type="text" id="usernameInput" placeholder="Ваше имя">
+            <button id="saveUsername">Сохранить имя</button>
+        </section>
+
+        <section id="movies">
+            <h2>Кино</h2>
+            <div class="event">
+                <h3>Фильм: В поисках счастья</h3>
+                <p>Описание: История о том, как главный герой, преодолевая трудности, стремится к своей мечте и находит счастье в самых неожиданных местах.</p>
+                <p>Дата: 15 октября 2023</p>
+                <p>Цена: 500 руб.</p>
+                <a href="cinema_seating.html?event=movie1"><button>Выбрать место</button></a>
+            </div>
+            <div class="event">
+                <h3>Фильм: Звёздные войны</h3>
+                <p>Описание: Эпическая космическая сага о борьбе между добром и злом, где храбрые герои сражаются за свободу галактики.</p>
+                <p>Дата: 20 октября 2023</p>
+                <p>Цена: 700 руб.</p>
+                <a href="cinema_seating.html?event=movie2"><button>Выбрать место</button></a>
+            </div>
+        </section>
+
+        <section id="theaters">
+            <h2>Театры</h2>
+            <div class="event">
+                <h3>Спектакль: Ромео и Джульетта</h3>
+                <p>Описание: Классическая трагедия Шекспира о любви, ненависти и судьбе, разворачивающаяся на фоне вражды двух семейств.</p>
+                <p>Дата: 22 октября 2023</p>
+                <p>Цена: 800 руб.</p>
+                <a href="seating.html?event=theater1"><button>Выбрать место</button></a>
+            </div>
+        </section>
+
+        <section id="concerts">
+            <h2>Концерты</h2>
+            <div class="event">
+                <h3>Концерт: Группа "Маяк"</h3>
+                <p>Описание: Уникальный концерт популярной группы "Маяк", где вы сможете насладиться живым исполнением лучших хитов и атмосферой праздника.</p>
+                <p>Дата: 28 октября 2023</p>
+                <p>Цена: 1200 руб.</p>
+                <a href="concert_venue.html?event=concert1"><button>Выбрать место</button></a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p align="center">&copy; 2025 Продажа Билетов. Все права защищены
+
+        </p>
+    </footer>
+
+    <script>
+        const userGreeting = document.getElementById('userGreeting');
+        const loginLink = document.getElementById('loginLink');
+        const registerLink = document.getElementById('registerLink');
+        const logoutLink = document.getElementById('logoutLink');
+        const userSetup = document.getElementById('userSetup');
+        const usernameInput = document.getElementById('usernameInput');
+        const saveUsernameButton = document.getElementById('saveUsername');
+
+        // Проверка наличия пользователя в локальном хранилище
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        if (user) {
+            userGreeting.innerText = `Добро пожаловать, ${user.name}!`; // Приветствие пользователя
+            logoutLink.style.display = 'inline'; // Показываем кнопку "Выйти"
+            loginLink.style.display = 'none'; // Скрываем кнопку "Вход"
+            registerLink.style.display = 'none'; // Скрываем кнопку "Регистрация"
+        } else {
+            userGreeting.innerText = 'Добро пожаловать! Пожалуйста, войдите или зарегистрируйтесь.'; // Приветствие для незарегистрированных пользователей
+            logoutLink.style.display = 'none'; // Скрываем кнопку "Выйти"
+            userSetup.style.display = 'block'; // Показываем форму для ввода имени
+        }
+
+        // Обработка сохранения имени пользователя
+        saveUsernameButton.addEventListener('click', function() {
+            const username = usernameInput.value.trim();
+            if (username) {
+                localStorage.setItem('user', JSON.stringify({ name: username })); // Сохраняем имя пользователя в локальном хранилище
+                userGreeting.innerText = `Добро пожаловать, ${username}!`; // Обновляем приветствие
+                userSetup.style.display = 'none'; // Скрываем форму для ввода имени
+                logoutLink.style.display = 'inline'; // Показываем кнопку "Выйти"
+                loginLink.style.display = 'none'; // Скрываем кнопку "Вход"
+                registerLink.style.display = 'none'; // Скрываем кнопку "Регистрация"
+            } else {
+                alert('Пожалуйста, введите ваше имя.'); // Предупреждение, если имя не введено
+            }
+        });
+
+        // Обработка выхода
+        logoutLink.addEventListener('click', function() {
+            localStorage.removeItem('user'); // Удаляем данные пользователя
+            window.location.reload(); // Перезагружаем страницу
+        });
+    </script>
+</body>
+</html>

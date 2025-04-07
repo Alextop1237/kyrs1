@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Планировка Концертной Площадки</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        .venue {
+            position: relative;
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+        }
+        .stage {
+            width: 80%;
+            height: 80px;
+            background-color: #ff7e7e;
+            margin: 20px auto;
+        }
+        .stage h2 {
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+            color: #333333;
+        }
+        .dance-floor {
+            width: 100%;
+            height: 200px;
+            background-color: #ffcc00;
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        .dance-floor h2 {
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+            color: #333;
+        }
+        .dance-spot {
+            width: 60px;
+            height: 50px;
+            background-color: #007bff;
+            margin: 5px;
+            border-radius: 5px;
+            position: relative;
+            text-align: center;
+            line-height: 50px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .dance-spot.selected {
+            background-color: #28a745;
+        }
+        .floor {
+            width: 100%;
+            background-color: #e0e0e0;
+            position: relative;
+            margin-top: 20px;
+        }
+        .floor h2 {
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+            color: #333;
+        }
+        .tables {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px;
+        }
+        .table {
+            width: 50px;
+            height: 50px;
+            background-color: #007bff;
+            margin: 5px;
+            border-radius: 5px;
+            position: relative;
+            text-align: center;
+            line-height: 50px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .table.selected {
+            background-color: #28a745;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .total {
+            margin: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        .action-buttons {
+            margin-top: 20px;
+        }
+        .action-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Планировка Концертной Площадки</h1>
+    </header>
+
+    <main>
+        <div class="venue">
+            <div class="stage">
+                <h2>Сцена</h2>
+            </div>
+            <div class="dance-floor">
+                <h2>Танцпол</h2>
+                <div class="dance-spot" onclick="showDanceSpotControls()">Выбрать</div>
+            </div>
+            <div class="floor">
+                <h2>Первый этаж</h2>
+                <div class="tables" id="firstFloor">
+                    <div class="table" onclick="selectTable(this, 'first')">1</div>
+                    <div class="table" onclick="selectTable(this, 'first')">2</div>
+                    <div class="table" onclick="selectTable(this, 'first')">3</div>
+                    <div class="table" onclick="selectTable(this, 'first')">4</div>
+                    <div class="table" onclick="selectTable(this, 'first')">5</div>
+                    <div class="table" onclick="selectTable(this, 'first')">6</div>
+                    <div class="table" onclick="selectTable(this, 'first')">7</div>
+                    <div class="table" onclick="selectTable(this, 'first')">8</div>
+                    <div class="table" onclick="selectTable(this, 'first')">9</div>
+                    <div class="table" onclick="selectTable(this, 'first')">10</div>
+                </div>
+            </div>
+            <div class="floor">
+                <h2>Второй этаж</h2>
+                <div class="tables" id="secondFloor">
+                    <div class="table" onclick="selectTable(this, 'second')">1</div>
+                    <div class="table" onclick="selectTable(this, 'second')">2</div>
+                    <div class="table" onclick="selectTable(this, 'second')">3</div>
+                    <div class="table" onclick="selectTable(this, 'second')">4</div>
+                    <div class="table" onclick="selectTable(this, 'second')">5</div>
+                    <div class="table" onclick="selectTable(this, 'second')">6</div>
+                    <div class="table" onclick="selectTable(this, 'second')">7</div>
+                    <div class="table" onclick="selectTable(this, 'second')">8</div>
+                    <div class="table" onclick="selectTable(this, 'second')">9</div>
+                    <div class="table" onclick="selectTable(this, 'second')">10</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="total" id="totalCost">Общая стоимость: 0₽</div>
+        <div class="action-buttons">
+            <button class="action-button" onclick="confirmOrder()">Подтвердить заказ</button>
+            <button class="action-button" onclick="cancelOrder()">Отменить</button>
+        </div>
+
+        <!-- Модальное окно для выбора мест на танцполе -->
+        <div id="danceSpotModal" style="display:none; margin-top: 20px;">
+            <h3>Выберите количество мест на танцполе</h3>
+            <button onclick="changeDanceSpotCount(-1)">-</button>
+            <span id="danceSpotCount">0</span>
+            <button onclick="changeDanceSpotCount(1)">+</button>
+            <div>
+                <button onclick="confirmDanceSpotSelection()">Подтвердить выбор</button>
+                <button onclick="closeDanceSpotModal()">Отмена</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let selectedTables = [];
+        let selectedDanceSpots = [];
+        const tablePrice = 1000; // Примерная цена за стол
+        const danceFloorPrice = 500; // Цена за место на танцполе
+        let availableDanceSpots = 50; // Общее количество мест на танцполе
+        let currentDanceSpotCount = 0; // Текущее количество выбранных мест
+
+        function showDanceSpotControls() {
+            document.getElementById('danceSpotModal').style.display = 'block';
+        }
+
+        function changeDanceSpotCount(change) {
+            currentDanceSpotCount += change;
+            if (currentDanceSpotCount < 0) currentDanceSpotCount = 0;
+            if (currentDanceSpotCount > availableDanceSpots) {
+                alert("Недостаточно мест на танцполе!");
+                currentDanceSpotCount = availableDanceSpots;
+            }
+            document.getElementById('danceSpotCount').innerText = currentDanceSpotCount;
+        }
+
+        function confirmDanceSpotSelection() {
+            if (currentDanceSpotCount > 0) {
+                for (let i = 0; i < currentDanceSpotCount; i++) {
+                    const spotNumber = `dance-floor-${selectedDanceSpots.length + 1}`;
+                    selectedDanceSpots.push(spotNumber);
+                }
+                updateTotalCost();
+                closeDanceSpotModal();
+            } else {                alert("Пожалуйста, выберите хотя бы одно место на танцполе.");
+            }
+        }
+
+        function closeDanceSpotModal() {
+            document.getElementById('danceSpotModal').style.display = 'none';
+        }
+
+        function selectTable(table, floor) {
+            const tableIndex = Array.from(table.parentNode.children).indexOf(table);
+            const tableId = `${floor}-table-${tableIndex + 1}`;
+
+            if (selectedTables.includes(tableId)) {
+                selectedTables = selectedTables.filter(t => t !== tableId);
+                table.classList.remove('selected');
+            } else {
+                selectedTables.push(tableId);
+                table.classList.add('selected');
+            }
+            updateTotalCost();
+        }
+
+        function updateTotalCost() {
+            const totalDanceSpotCost = currentDanceSpotCount * danceFloorPrice;
+            const totalTableCost = selectedTables.length * tablePrice;
+            const totalCost = totalDanceSpotCost + totalTableCost;
+
+            document.getElementById('totalCost').innerText = `Общая стоимость: ${totalCost}₽`;
+        }
+
+        function confirmOrder() {
+            if (selectedTables.length === 0 && currentDanceSpotCount === 0) {
+                alert("Вы не выбрали ни одного стола или места на танцполе.");
+                return;
+            }
+            alert("Ваш заказ подтверждён!\n" +
+                  `Выбрано мест на танцполе: ${currentDanceSpotCount}\n` +
+                  `Выбрано столов: ${selectedTables.length}\n` +
+                  `Общая стоимость: ${document.getElementById('totalCost').innerText}`);
+        }
+
+        function cancelOrder() {
+            selectedTables = [];
+            currentDanceSpotCount = 0;
+            document.querySelectorAll('.table.selected').forEach(table => {
+                table.classList.remove('selected');
+            });
+            updateTotalCost();
+            alert("Ваш заказ отменён.");
+        }
+    </script>
+</body>
+</html>
+

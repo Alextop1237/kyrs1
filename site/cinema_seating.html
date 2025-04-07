@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Планировка Кинотеатра</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .screen {
+            height: 20px; /* Высота линии */
+            width: 35%; /* Ширина линии */
+            background-color: #000; /* Черный цвет для линии */
+            margin: 20px auto; /* Центрируем линию и добавляем отступ сверху */
+            position: relative; /* Для позиционирования текста внутри экрана */
+        }
+        .screen-text {
+            color: white; /* Белый цвет текста */
+            position: absolute; /* Абсолютное позиционирование */
+            top: 0; /* Положение сверху */
+            left: 50%; /* Центрируем по горизонтали */
+            transform: translateX(-50%); /* Центрируем текст */
+            font-weight: bold; /* Жирный шрифт */
+            font-size: 14px; /* Размер шрифта */
+        }
+        .seat {
+            width: 25px; /* Ширина мест */
+            height: 25px; /* Высота мест */
+            background-color: #28a745;
+            margin: 2px; /* Отступ между местами */
+            display: inline-block;
+            text-align: center;
+            line-height: 25px; /* Высота строки */
+            color: white;
+            cursor: pointer;
+            font-size: 12px; /* Размер шрифта */
+        }
+        .seat.selected {
+            background-color: #dc3545; /* Цвет выбранного места */
+        }
+        .seating-plan {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Выравнивание по центру по вертикали */
+        }
+        .row-number {
+            width: 30px; /* Ширина для номера ряда */
+            font-weight: bold; /* Жирный шрифт для номера ряда */
+            margin-right: 10px; /* Отступ между номером ряда и местами */
+        }
+        .total-price {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Планировка Кинотеатра</h1>
+    </header>
+
+    <main>
+        <h2>Выберите место</h2>
+        <div class="seating-plan">
+            <div class="screen">
+                <div class="screen-text">Экран</div> <!-- Добавленный текст на экране -->
+            </div>
+            <!-- Генерация мест -->
+            <script>
+                const rows = 10; // Количество рядов
+                const seatsPerRow = 15; // Количество мест в ряду
+                const seatingContainer = document.querySelector('.seating-plan');
+                const seatPrices = []; // Массив для хранения цен мест
+
+                // Устанавливаем цены для мест (примерные значения)
+                for (let i = 0; i < rows; i++) {
+                    if (i < 3) {
+                        seatPrices[i] = 1200; // Первые 3 ряда (дорогие места)
+                    } else if (i < 7) {
+                        seatPrices[i] = 800; // Средние 4 ряда
+                    } else {
+                        seatPrices[i] = 500; // Последние 3 ряда (дешевые места)
+                    }
+                }
+
+                for (let i = 0; i < rows; i++) {
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'row';
+
+                    // Создаем элемент для номера ряда
+                    const rowNumber = document.createElement('div');
+                    rowNumber.className = 'row-number';
+                    rowNumber.textContent = (i + 1); // Нумерация рядов (1, 2, 3, ...)
+                    
+                    rowDiv.appendChild(rowNumber); // Добавляем номер ряда в строку
+
+                    for (let j = 1; j <= seatsPerRow; j++) {
+                        const seatDiv = document.createElement('div');
+                        seatDiv.className = 'seat';
+                        seatDiv.textContent = (i * seatsPerRow + j); // Название места (1, 2, 3, ...)
+
+                        // Устанавливаем цену для места
+                        seatDiv.dataset.price = seatPrices[i]; 
+
+                        // Добавляем обработчик клика для выбора места
+                        seatDiv.onclick = function() {
+                            seatDiv.classList.toggle('selected');
+                            updateTotalPrice();
+                        };
+
+                        rowDiv.appendChild(seatDiv); // Добавляем место в строку
+                    }
+                    seatingContainer.appendChild(rowDiv); // Добавляем строку в контейнер
+                }
+
+                // Функция для обновления общей стоимости выбранных мест
+                const totalPriceDiv = document.createElement('div');
+                totalPriceDiv.className = 'total-price';
+                totalPriceDiv.textContent = 'Общая стоимость: 0 Р';
+                seatingContainer.appendChild(totalPriceDiv);
+
+                function updateTotalPrice() {
+                    const selectedSeatsDivs = document.querySelectorAll('.seat.selected');
+                    let totalPrice = 0;
+
+                    selectedSeatsDivs.forEach(seat => {
+                        const seatPrice = parseInt(seat.dataset.price);
+                        totalPrice += seatPrice; // Добавляем цену места
+                    });
+
+                    totalPriceDiv.textContent = `Общая стоимость: ${totalPrice} Р`;
+                }
+
+                function confirmSelection() {
+                    const selectedSeatsDivs = document.querySelectorAll('.seat.selected');
+                    if (selectedSeatsDivs.length === 0) {
+                        alert('Пожалуйста, выберите хотя бы одно место.');
+                    } else {
+                        const selectedSeatNumbers = Array.from(selectedSeatsDivs).map(seat => seat.textContent).join(', ');
+                        const totalPrice = Array.from(selectedSeatsDivs).reduce((total, seat) => total + parseInt(seat.dataset.price), 0);
+                        alert(`Вы выбрали места: ${selectedSeatNumbers}\nОбщая стоимость: ${totalPrice} Р`);
+                    }
+                }
+
+                function cancelSelection() {
+                    const selectedSeatsDivs = document.querySelectorAll('.seat.selected');
+                    selectedSeatsDivs.forEach(seat => {
+                        seat.classList.remove('selected'); // Убираем выделение мест
+                    });
+                    totalPriceDiv.textContent = 'Общая стоимость: 0 Р'; // Сбрасываем общую стоимость
+                }
+            </script>
+        </div>
+        <button onclick="confirmSelection()">Подтвердить выбор</button>
+        <button onclick="cancelSelection()">Отменить выбор</button>
+    </main>
+</body>
+</html>

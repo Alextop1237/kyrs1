@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Планировка Зала</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .stage {
+            background-color: #ffc107;
+            height: 150px; /* Высота сцены */
+            width: 50%; /* Ширина сцены */
+            margin: 30px auto; /* Центрируем сцену */
+            position: relative;
+            display: inline-block;
+            border-radius: 10px; /* Добавили закругленные углы */
+        }
+        .seat {
+            width: 25px; /* Ширина мест */
+            height: 25px; /* Высота мест */
+            background-color: #28a745;
+            margin: 2px; /* Отступ между местами */
+            display: inline-block;
+            text-align: center;
+            line-height: 25px; /* Высота строки */
+            color: white;
+            cursor: pointer;
+            font-size: 12px; /* Размер шрифта */
+        }
+        .seat.selected {
+            background-color: #dc3545; /* Цвет выбранного места */
+        }
+        .seating-plan {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Выравнивание по центру по вертикали */
+        }
+        .row-number {
+            width: 30px; /* Ширина для номера ряда */
+            font-weight: bold; /* Жирный шрифт для номера ряда */
+            margin-right: 10px; /* Отступ между номером ряда и местами */
+        }
+        .total-price {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Планировка Зала</h1>
+    </header>
+
+    <main>
+        <h2>Выберите место</h2>
+        <div class="seating-plan">
+            <div class="stage">Сцена</div>
+            <!-- Генерация мест -->
+            <script>
+                const rows = 20; // Количество рядов
+                const seatsPerRow = 30; // Количество мест в ряду
+                const seatingContainer = document.querySelector('.seating-plan');
+                const seatPrices = []; // Массив для хранения цен мест
+
+                // Устанавливаем цены для мест (примерные значения)
+                for (let i = 0; i < rows; i++) {
+                    if (i < 5) {
+                        seatPrices[i] = 1500; // Первые 5 рядов (дорогие места)
+                    } else if (i < 15) {
+                        seatPrices[i] = 1000; // Средние 10 рядов
+                    } else {
+                        seatPrices[i] = 700; // Последние 5 рядов (дешевые места)
+                    }
+                }
+
+                for (let i = 0; i < rows; i++) {
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'row';
+
+                    // Создаем элемент для номера ряда
+                    const rowNumber = document.createElement('div');
+                    rowNumber.className = 'row-number';
+                    rowNumber.textContent = (i + 1); // Нумерация рядов (1, 2, 3, ...)
+                    
+                    rowDiv.appendChild(rowNumber); // Добавляем номер ряда в строку
+
+                    for (let j = 1; j <= seatsPerRow; j++) {
+                        const seatDiv = document.createElement('div');
+                        seatDiv.className = 'seat';
+                        seatDiv.textContent = (i * seatsPerRow + j); // Название места (1, 2, 3, ...)
+                        seatDiv.dataset.price = seatPrices[i]; // Устанавливаем цену места
+                        seatDiv.onclick = function() { selectSeat(seatDiv); };
+                        rowDiv.appendChild(seatDiv);
+                    }
+                    seatingContainer.appendChild(rowDiv);
+                }
+
+                const selectedSeats = new Set();
+                const totalPriceElement = document.createElement('div');
+                totalPriceElement.className = 'total-price';
+                totalPriceElement.textContent = 'Суммарная цена: 0 Р';
+                seatingContainer.appendChild(totalPriceElement);
+
+                function selectSeat(seat) {
+                    if (selectedSeats.has(seat)) {
+                        selectedSeats.delete(seat);
+                        seat.classList.remove('selected');
+                    } else {
+                        selectedSeats.add(seat);
+                        seat.classList.add('selected');
+                    }
+                    updateTotalPrice();
+                }
+
+                function updateTotalPrice() {
+                    let totalPrice = 0;
+                    selectedSeats.forEach(seat => {
+                        totalPrice += parseInt(seat.dataset.price);
+                    });
+                    totalPriceElement.textContent = `Суммарная цена: ${totalPrice} Р`;
+                }
+
+                function confirmSelection() {
+                    if (selectedSeats.size === 0) {
+                        alert('Пожалуйста, выберите хотя бы одно место.');
+                    } else {
+                        const selectedSeatNumbers = Array.from(selectedSeats).map(seat => seat.textContent).join(', ');
+                        const totalPrice = Array.from(selectedSeats).reduce((total, seat) => total + parseInt(seat.dataset.price), 0);
+                        alert(`Вы выбрали места: ${selectedSeatNumbers}\nСуммарная цена: ${totalPrice} Р`);
+                        // Здесь можно добавить логику для завершения покупки билетов
+                    }
+                }
+
+                function cancelSelection() {
+                    selectedSeats.forEach(seat => seat.classList.remove('selected'));
+                    selectedSeats.clear();
+                    updateTotalPrice(); // Обновляем общую стоимость после отмены выбора
+                }
+            </script>
+        </div>
+        <button onclick="confirmSelection()">Подтвердить выбор</button>
+        <button onclick="cancelSelection()">Отменить выбор</button>
+    </main>
+</body>
+</html>
