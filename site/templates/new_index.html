@@ -1,0 +1,23 @@
+{% extends "new_base.html" %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+    <h1>Ближайшие мероприятия</h1>
+    
+    {% if not measures %}
+        <div class="no-events">
+            В настоящее время нет доступных мероприятий
+        </div>
+    {% else %}
+        {% for event in measures %}
+        <div class="event-card">
+            <h3>{{ event[1] }}</h3>
+            <p><strong>Дата:</strong> {{ event[2] }}</p>
+            <p><strong>Время:</strong> {{ event[3] }}</p>
+            <p><strong>Цена:</strong> {{ event[4] }} ₽</p>
+            <a href="/measure/{{ event[0] }}">Подробнее</a>
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

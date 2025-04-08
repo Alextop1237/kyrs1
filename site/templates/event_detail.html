@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.name }}{% endblock %}
+
+{% block content %}
+    <div class="event-detail">
+        <h2>{{ event.name }}</h2>
+        
+        <div class="event-meta">
+            <p><strong>Дата:</strong> {{ event.date.strftime('%d.%m.%Y') }}</p>
+            <p><strong>Время:</strong> {{ event.time }}</p>
+            <p><strong>Продолжительность:</strong> {{ event.length }} часов</p>
+            <p><strong>Место проведения:</strong> {{ area.name }}</p>
+        </div>
+        
+        <div class="event-description">
+            <h3>Описание мероприятия</h3>
+            <p>Здесь будет подробное описание мероприятия.</p>
+        </div>
+        
+        <div class="ticket-selection">
+            <h3>Выбор билетов</h3>
+            <form method="POST" action="{{ url_for('event_detail', event_id=event.id) }}">
+                <div class="form-group">
+                    <label for="row">Ряд:</label>
+                    <select name="row" id="row" required>
+                        {% for topology in area.topologies %}
+                            <option value="{{ topology.row }}">Ряд {{ topology.row }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="place">Место:</label>
+                    <input type="number" name="place" id="place" min="1" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Купить билет</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

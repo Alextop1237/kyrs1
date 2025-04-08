@@ -1,0 +1,51 @@
+{% extends "../base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+    <section class="admin-dashboard">
+        <h1>Admin Dashboard</h1>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Events</h3>
+                <p>{{ measures_count }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Users</h3>
+                <p>{{ users_count }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Tickets Sold</h3>
+                <p>{{ tickets_count }}</p>
+            </div>
+        </div>
+        
+        <div class="admin-actions">
+            <a href="{{ url_for('add_measure') }}" class="btn">Add New Event</a>
+            <a href="{{ url_for('add_area') }}" class="btn">Add New Venue</a>
+        </div>
+        
+        <div class="recent-events">
+            <h2>Recent Events</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in recent_measures %}
+                        <tr>
+                            <td>{{ event[1] }}</td>
+                            <td>{{ event[2] }}</td>
+                            <td>{{ event[3] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ultimate Index</title>
+    <style>
+        .event {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ultimate Index Page</h1>
+    
+    {% if measures %}
+        {% for event in measures %}
+        <div class="event">
+            <h3>{{ event[1] }}</h3>
+            <p>Дата: {{ event[2] }}</p>
+            <p>Время: {{ event[3] }}</p>
+            <p>Цена: {{ event[4] }} руб.</p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="color:red;">Мероприятий не найдено!</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Все мероприятия{% endblock %}
+
+{% block content %}
+    <section class="events-list">
+        <h1>Все предстоящие мероприятия</h1>
+        <div class="events-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Мероприятие</th>
+                        <th>Дата и время</th>
+                        <th>Место</th>
+                        <th>Длительность</th>
+                        <th>Цена от</th>
+                        <th>Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for measure in measures %}
+                        <tr>
+                            <td>{{ measure[1] }}</td>
+                            <td>{{ measure[2] }} в {{ measure[3] }}</td>
+                            <td>{{ measure[6] }}</td>
+                            <td>{{ measure[4] }} часов</td>
+                            <td>{{ "%.2f"|format(measure[5]) }} ₽</td>
+                            <td><a href="{{ url_for('measure_detail', measure_id=measure[0]) }}" class="btn">Подробнее</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}
